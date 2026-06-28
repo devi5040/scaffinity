@@ -1,0 +1,28 @@
+{
+  "name": "scaffoldx",
+  "version": "1.0.0",
+  "description": "Generate, export, and share project structures as portable JSON blueprints",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "scaffoldx": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsup src/cli.ts src/index.ts --format cjs --dts",
+    "dev": "ts-node src/cli.ts",
+    "start": "node dist/cli.js"
+  },
+  "keywords": [
+    "scaffold",
+    "cli",
+    "boilerplate",
+    "project-structure",
+    "generator",
+    "typescript",
+    "blueprint"
+  ],
+  "author": "Deviprasad Rai <dpraidola@gmail.com>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}
