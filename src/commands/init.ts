@@ -2,6 +2,7 @@ import chalk from "chalk";
 import { StructureNode } from "../types";
 import prompts from "prompts";
 import path from "path";
+import fs from "fs-extra";
 
 interface QueueItem {
   node: StructureNode;
@@ -90,4 +91,40 @@ async function buildInteractive(): Promise<StructureNode> {
     }
   }
   return root;
+}
+
+export async function initCommand(): Promise<void> {
+  try {
+    const structure = await buildInteractive();
+
+    console.log(chalk.bold("\n Your blueprint:\n"));
+    console.log(chalk.dim(JSON.stringify(structure, null, 2)));
+
+    const { outputFile } = await prompts({
+      type: "text",
+      name: "outputFile",
+      message: "Save blueprint as: ",
+      initial: "scaffold.json",
+    });
+
+    if (outputFile) {
+      const outputPath = path.resolve(process.cwd(), outputFile);
+      await fs.writeFile(
+        outputPath,
+        JSON.stringify(structure, null, 2),
+        "utf-8",
+      );
+      console.log(
+        chalk.green(`\n Blueprint saved to: ${chalk.bold(outputPath)}`),
+      );
+      console.log(
+        chalk.dim(
+          `\nRun: scaffoldx generate ${outputFile} to create your structure\n`,
+        ),
+      );
+    }
+  } catch (error) {
+    console.error(chalk.red("Init failed"), error);
+    process.exit(1);
+  }
 }
