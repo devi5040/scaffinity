@@ -1,5 +1,5 @@
 {
-  "name": "scaffoldx",
+  "name": "scaffinity",
   "version": "1.0.0",
   "description": "Generate, export, and share project structures as portable JSON blueprints",
   "main": "dist/index.js",
