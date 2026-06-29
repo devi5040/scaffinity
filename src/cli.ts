@@ -3,6 +3,7 @@
 import chalk from "chalk";
 import { Command } from "commander";
 import { generateCommand } from "./commands/generate";
+import { exportCommand } from "./commands/export";
 
 const program = new Command();
 
@@ -38,6 +39,27 @@ program
         output: options.output,
         dry: options.dry ?? false,
         verbose: options.verbose ?? false,
+      });
+    },
+  );
+
+// EXPORT
+program
+  .command("export <path>")
+  .alias("e")
+  .description("Export an existing project structure to a JSON blueprint")
+  .option("-o, --output <file>", "Save blueprint to file (default: stdout)")
+  .option("-i, --ignore <patterns...>", "Additional patterns to ignore")
+  .option("--depth <number>", "Maximum directory depth (default: 10)", parseInt)
+  .action(
+    async (
+      projectPath: string,
+      options: { output?: string; ignore?: string[]; depth?: number },
+    ) => {
+      await exportCommand(projectPath, {
+        output: options.output,
+        ignore: options.ignore,
+        depth: options.depth,
       });
     },
   );
