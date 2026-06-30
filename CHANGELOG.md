@@ -5,9 +5,9 @@ All notable changes to this project will be documented in this file.
 ## [1.0.0] - 2026-06-30
 
 ### Added
-- `scaffonity generate` - generate project structure from a JSON blueprint
-- `scaffonity export` - export existing project structure to JSON blueprint
-- `scaffonity init` - interactive blueprint builder
+- `scaffinity generate` - generate project structure from a JSON blueprint
+- `scaffinity export` - export existing project structure to JSON blueprint
+- `scaffinity init` - interactive blueprint builder
 - Dry run mode (`--dry`) for generate
 - Verbose output mode (`--verbose`)
 - Ignore patterns for export (`--ignore`)
