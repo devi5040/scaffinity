@@ -1,4 +1,4 @@
-# Contributing to Scaffonity
+# Contributing to Scaffinity
 
 Thanks for considering a contribution - every PR, issue, and blueprint helps.
 
@@ -12,8 +12,8 @@ Thanks for considering a contribution - every PR, issue, and blueprint helps.
 ## Development Setup
 
 ```bash
-git clone https://github.com/devi5040/scaffonity
-cd scaffonity
+git clone https://github.com/devi5040/scaffinity
+cd scaffinity
 npm install
 npm run dev -- generate examples/express-ts-api.json --dry --verbose
 ```
