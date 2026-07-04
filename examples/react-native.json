@@ -1,0 +1,31 @@
+{
+  "src": {
+    "components": {
+      "Button.tsx": "import React from 'react'\nimport { Pressable, StyleSheet, Text } from 'react-native'\n\ntype ButtonProps = {\n  title: string\n  onPress?: () => void\n  variant?: 'primary' | 'secondary'\n}\n\nexport default function Button({ title, onPress, variant = 'primary' }: ButtonProps) {\n  return (\n    <Pressable\n      accessibilityRole=\"button\"\n      onPress={onPress}\n      style={({ pressed }) => [\n        styles.button,\n        styles[variant],\n        pressed && styles.pressed\n      ]}\n    >\n      <Text style={styles.label}>{title}</Text>\n    </Pressable>\n  )\n}\n\nconst styles = StyleSheet.create({\n  button: {\n    alignItems: 'center',\n    borderRadius: 8,\n    paddingHorizontal: 18,\n    paddingVertical: 12\n  },\n  primary: {\n    backgroundColor: '#2563eb'\n  },\n  secondary: {\n    backgroundColor: '#475569'\n  },\n  pressed: {\n    opacity: 0.8\n  },\n  label: {\n    color: '#ffffff',\n    fontSize: 16,\n    fontWeight: '600'\n  }\n})\n"
+    },
+    "screens": {
+      "HomeScreen.tsx": "import React from 'react'\nimport { StyleSheet, Text, View } from 'react-native'\nimport Button from '../components/Button'\n\nexport default function HomeScreen() {\n  return (\n    <View style={styles.container}>\n      <Text style={styles.title}>Welcome to your React Native app</Text>\n      <Text style={styles.subtitle}>\n        Start building from src/screens/HomeScreen.tsx.\n      </Text>\n      <Button title=\"Get started\" onPress={() => console.log('Get started pressed')} />\n    </View>\n  )\n}\n\nconst styles = StyleSheet.create({\n  container: {\n    flex: 1,\n    justifyContent: 'center',\n    padding: 24,\n    backgroundColor: '#f8fafc'\n  },\n  title: {\n    color: '#0f172a',\n    fontSize: 28,\n    fontWeight: '700',\n    marginBottom: 12\n  },\n  subtitle: {\n    color: '#475569',\n    fontSize: 16,\n    lineHeight: 24,\n    marginBottom: 24\n  }\n})\n"
+    },
+    "navigation": {
+      "AppNavigator.tsx": "import React from 'react'\nimport HomeScreen from '../screens/HomeScreen'\n\nexport default function AppNavigator() {\n  return <HomeScreen />\n}\n"
+    },
+    "hooks": {
+      "useFetch.ts": "import { useCallback, useEffect, useState } from 'react'\n\ntype FetchState<T> = {\n  data: T | null\n  loading: boolean\n  error: Error | null\n  refetch: () => Promise<void>\n}\n\nexport function useFetch<T = unknown>(url: string): FetchState<T> {\n  const [data, setData] = useState<T | null>(null)\n  const [loading, setLoading] = useState(true)\n  const [error, setError] = useState<Error | null>(null)\n\n  const fetchData = useCallback(async () => {\n    setLoading(true)\n    setError(null)\n\n    try {\n      const response = await fetch(url)\n\n      if (!response.ok) {\n        throw new Error(`Request failed with ${response.status}`)\n      }\n\n      const json = (await response.json()) as T\n      setData(json)\n    } catch (requestError) {\n      setError(\n        requestError instanceof Error\n          ? requestError\n          : new Error('Unknown request error')\n      )\n    } finally {\n      setLoading(false)\n    }\n  }, [url])\n\n  useEffect(() => {\n    void fetchData()\n  }, [fetchData])\n\n  return { data, loading, error, refetch: fetchData }\n}\n"
+    },
+    "services": {
+      "api.ts": "import { API_URL } from '../utils/constants'\n\nexport async function getJson<T = unknown>(path: string): Promise<T> {\n  const response = await fetch(`${API_URL}${path}`)\n\n  if (!response.ok) {\n    throw new Error(`API request failed with ${response.status}`)\n  }\n\n  return (await response.json()) as T\n}\n"
+    },
+    "utils": {
+      "constants.ts": "export const APP_NAME = 'Scaffinity Mobile'\nexport const API_URL = 'https://api.example.com'\n"
+    }
+  },
+  "assets": {},
+  "App.tsx": "import React from 'react'\nimport { SafeAreaView, StatusBar, StyleSheet } from 'react-native'\nimport AppNavigator from './src/navigation/AppNavigator'\n\nexport default function App() {\n  return (\n    <SafeAreaView style={styles.container}>\n      <StatusBar barStyle=\"dark-content\" />\n      <AppNavigator />\n    </SafeAreaView>\n  )\n}\n\nconst styles = StyleSheet.create({\n  container: {\n    flex: 1,\n    backgroundColor: '#f8fafc'\n  }\n})\n",
+  "index.js": "import { AppRegistry } from 'react-native'\nimport App from './App'\nimport { name as appName } from './app.json'\n\nAppRegistry.registerComponent(appName, () => App)\n",
+  "app.json": "{\n  \"name\": \"MobileApp\",\n  \"displayName\": \"Mobile App\"\n}\n",
+  "package.json": "{\n  \"name\": \"mobile-app\",\n  \"version\": \"1.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"start\": \"react-native start\",\n    \"android\": \"react-native run-android\",\n    \"ios\": \"react-native run-ios\"\n  },\n  \"dependencies\": {\n    \"react\": \"latest\",\n    \"react-native\": \"latest\"\n  },\n  \"devDependencies\": {\n    \"@react-native/typescript-config\": \"latest\",\n    \"typescript\": \"latest\"\n  }\n}\n",
+  "tsconfig.json": "{\n  \"extends\": \"@react-native/typescript-config/tsconfig.json\"\n}\n",
+  ".env.example": "API_URL=https://api.example.com\n",
+  ".gitignore": "node_modules\n.env\n.env.local\nandroid/app/build\nios/Pods\nbuild\ncoverage\nnpm-debug.log*\nyarn-debug.log*\nyarn-error.log*\n.DS_Store\n",
+  "README.md": "# Mobile App\n\nReact Native starter generated with [Scaffinity](https://github.com/devi5040/scaffinity).\n\n## Getting Started\n\n```bash\nnpm install\nnpm run start\n```\n\nRun `npm run android` or `npm run ios` after setting up your React Native development environment.\n"
+}
