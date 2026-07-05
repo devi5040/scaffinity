@@ -145,6 +145,8 @@ Ready-made blueprints in the [`/examples`](./examples) folder:
 | Blueprint                                               | Description                   |
 | ------------------------------------------------------- | ----------------------------- |
 | [`express-ts-api.json`](./examples/express-ts-api.json) | Express + TypeScript REST API |
+| [`nextjs-app.json`](./examples/nextjs-app.json)         | Next.js app with route groups |
+| [`nextjs-app-router.json`](./examples/nextjs-app-router.json) | Next.js App Router `src/app` project |
 | [`nest-api.json`](./examples/nest-api.json)             | NestJS REST API starter       |
 | [`nextjs-app.json`](./examples/nextjs-app.json)         | Next.js App Router project    |
 

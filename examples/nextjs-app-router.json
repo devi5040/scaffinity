@@ -1,0 +1,33 @@
+{
+  "src": {
+    "app": {
+      "layout.tsx": "import type { Metadata } from 'next';\nimport './globals.css';\n\nexport const metadata: Metadata = {\n  title: 'Next.js App Router Starter',\n  description: 'Generated with Scaffinity',\n};\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body>{children}</body>\n    </html>\n  );\n}\n",
+      "page.tsx": "export default function HomePage() {\n  return (\n    <main>\n      <h1>Next.js App Router Starter</h1>\n      <p>Generated with Scaffinity.</p>\n    </main>\n  );\n}\n",
+      "globals.css": ":root {\n  color-scheme: light;\n  font-family: system-ui, sans-serif;\n}\n\nbody {\n  margin: 0;\n}\n\nmain {\n  padding: 2rem;\n}\n"
+    },
+    "components": {
+      ".gitkeep": ""
+    },
+    "hooks": {
+      ".gitkeep": ""
+    },
+    "lib": {
+      "utils.ts": "export function cn(...classes: Array<string | false | null | undefined>) {\n  return classes.filter(Boolean).join(' ');\n}\n"
+    },
+    "types": {
+      "index.ts": "export type NavItem = {\n  label: string;\n  href: string;\n};\n"
+    },
+    "utils": {
+      "format.ts": "export function formatTitle(value: string) {\n  return value.trim().replace(/\\s+/g, ' ');\n}\n"
+    }
+  },
+  "public": {
+    ".gitkeep": ""
+  },
+  ".env.example": "NEXT_PUBLIC_APP_URL=http://localhost:3000\n",
+  ".gitignore": "node_modules\n.next\nout\n.env\n.env.local\n",
+  "README.md": "# Next.js App Router Starter\n\nGenerated with [Scaffinity](https://github.com/devi5040/scaffinity).\n\n## Getting Started\n\n```bash\nnpm install\nnpm run dev\n```\n\nThe generated app uses the Next.js App Router under `src/app`.\n",
+  "package.json": "{\n  \"name\": \"nextjs-app-router-starter\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"dev\": \"next dev\",\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"lint\": \"next lint\"\n  },\n  \"dependencies\": {\n    \"next\": \"latest\",\n    \"react\": \"latest\",\n    \"react-dom\": \"latest\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"latest\",\n    \"@types/react\": \"latest\",\n    \"@types/react-dom\": \"latest\",\n    \"typescript\": \"latest\"\n  }\n}\n",
+  "next.config.js": "/** @type {import('next').NextConfig} */\nconst nextConfig = {};\n\nmodule.exports = nextConfig;\n",
+  "tsconfig.json": "{\n  \"compilerOptions\": {\n    \"target\": \"es5\",\n    \"lib\": [\"dom\", \"dom.iterable\", \"esnext\"],\n    \"allowJs\": true,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"preserve\",\n    \"incremental\": true\n  },\n  \"include\": [\"next-env.d.ts\", \"**/*.ts\", \"**/*.tsx\", \".next/types/**/*.ts\"],\n  \"exclude\": [\"node_modules\"]\n}\n"
+}
