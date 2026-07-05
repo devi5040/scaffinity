@@ -1,0 +1,29 @@
+{
+  "src": {
+    "app.module.ts": "import { Module } from '@nestjs/common';\nimport { AuthModule } from './auth/auth.module';\nimport { UsersModule } from './users/users.module';\n\n@Module({\n  imports: [AuthModule, UsersModule],\n})\nexport class AppModule {}\n",
+    "main.ts": "import { ValidationPipe } from '@nestjs/common';\nimport { NestFactory } from '@nestjs/core';\nimport { AppModule } from './app.module';\nimport { HttpExceptionFilter } from './common/filters/http-exception.filter';\n\nasync function bootstrap() {\n  const app = await NestFactory.create(AppModule);\n  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));\n  app.useGlobalFilters(new HttpExceptionFilter());\n  app.enableCors({ origin: process.env.CORS_ORIGIN ?? 'http://localhost:3000' });\n  await app.listen(process.env.PORT ? Number(process.env.PORT) : 3000);\n}\n\nvoid bootstrap();\n",
+    "auth": {
+      "auth.controller.ts": "import { Controller, Get } from '@nestjs/common';\n\n@Controller('auth')\nexport class AuthController {\n  @Get('health')\n  health() {\n    return { status: 'auth-ready' };\n  }\n}\n",
+      "auth.module.ts": "import { Module } from '@nestjs/common';\nimport { AuthController } from './auth.controller';\nimport { AuthService } from './auth.service';\n\n@Module({\n  controllers: [AuthController],\n  providers: [AuthService],\n  exports: [AuthService],\n})\nexport class AuthModule {}\n",
+      "auth.service.ts": "import { Injectable } from '@nestjs/common';\n\n@Injectable()\nexport class AuthService {\n  validateToken(token: string) {\n    return token.length > 0;\n  }\n}\n"
+    },
+    "users": {
+      "users.controller.ts": "import { Controller, Get } from '@nestjs/common';\nimport { UsersService } from './users.service';\n\n@Controller('users')\nexport class UsersController {\n  constructor(private readonly usersService: UsersService) {}\n\n  @Get()\n  findAll() {\n    return this.usersService.findAll();\n  }\n}\n",
+      "users.module.ts": "import { Module } from '@nestjs/common';\nimport { UsersController } from './users.controller';\nimport { UsersService } from './users.service';\n\n@Module({\n  controllers: [UsersController],\n  providers: [UsersService],\n})\nexport class UsersModule {}\n",
+      "users.service.ts": "import { Injectable } from '@nestjs/common';\n\n@Injectable()\nexport class UsersService {\n  findAll() {\n    return [];\n  }\n}\n"
+    },
+    "common": {
+      "guards": {
+        "auth.guard.ts": "import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';\n\n@Injectable()\nexport class AuthGuard implements CanActivate {\n  canActivate(context: ExecutionContext): boolean {\n    const request = context.switchToHttp().getRequest<{ headers: Record<string, string | undefined> }>();\n    return Boolean(request.headers.authorization);\n  }\n}\n"
+      },
+      "filters": {
+        "http-exception.filter.ts": "import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from '@nestjs/common';\n\n@Catch(HttpException)\nexport class HttpExceptionFilter implements ExceptionFilter {\n  catch(exception: HttpException, host: ArgumentsHost) {\n    const response = host.switchToHttp().getResponse();\n    response.status(exception.getStatus()).json({\n      statusCode: exception.getStatus(),\n      message: exception.message,\n    });\n  }\n}\n"
+      }
+    }
+  },
+  ".env.example": "PORT=3000\nCORS_ORIGIN=http://localhost:3000\n",
+  ".gitignore": "node_modules\ndist\n.env\ncoverage\n",
+  "README.md": "# NestJS REST API Starter\n\nGenerated with [Scaffinity](https://github.com/devi5040/scaffinity).\n\n## Getting Started\n\n```bash\nnpm install\nnpm run start:dev\n```\n\nThis blueprint includes starter auth and users modules plus common guard/filter folders.\n",
+  "package.json": "{\n  \"name\": \"nestjs-rest-api-starter\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"start\": \"nest start\",\n    \"start:dev\": \"nest start --watch\",\n    \"build\": \"nest build\",\n    \"test\": \"jest\"\n  },\n  \"dependencies\": {\n    \"@nestjs/common\": \"latest\",\n    \"@nestjs/core\": \"latest\",\n    \"@nestjs/platform-express\": \"latest\",\n    \"reflect-metadata\": \"latest\",\n    \"rxjs\": \"latest\"\n  },\n  \"devDependencies\": {\n    \"@nestjs/cli\": \"latest\",\n    \"@nestjs/testing\": \"latest\",\n    \"@types/node\": \"latest\",\n    \"typescript\": \"latest\"\n  }\n}\n",
+  "tsconfig.json": "{\n  \"compilerOptions\": {\n    \"module\": \"commonjs\",\n    \"declaration\": true,\n    \"removeComments\": true,\n    \"emitDecoratorMetadata\": true,\n    \"experimentalDecorators\": true,\n    \"allowSyntheticDefaultImports\": true,\n    \"target\": \"es2021\",\n    \"sourceMap\": true,\n    \"outDir\": \"./dist\",\n    \"baseUrl\": \"./\",\n    \"incremental\": true,\n    \"strict\": true,\n    \"skipLibCheck\": true\n  }\n}\n"
+}
