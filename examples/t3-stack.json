@@ -1,14 +1,37 @@
 {
   "src": {
     "app": {
-      "layout.tsx": "import '~/styles/globals.css';\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body>{children}</body>\n    </html>\n  );\n}\n",
-      "page.tsx": "import { api } from '~/server/api/root';\n\nexport default function HomePage() {\n  return (\n    <main>\n      <h1>T3 Stack Starter</h1>\n      <p>{api.health()}</p>\n    </main>\n  );\n}\n"
+      "layout.tsx": "import '~/styles/globals.css';\n\nimport { TRPCReactProvider } from '~/trpc/react';\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang='en'>\n      <body>\n        <TRPCReactProvider>{children}</TRPCReactProvider>\n      </body>\n    </html>\n  );\n}\n",
+      "page.tsx": "import { HealthCheck } from '~/app/_components/health-check';\n\nexport default function HomePage() {\n  return (\n    <main className='mx-auto flex min-h-screen max-w-3xl flex-col gap-6 px-6 py-12'>\n      <section>\n        <p className='text-sm font-medium uppercase tracking-wide text-sky-600'>Scaffinity blueprint</p>\n        <h1 className='mt-2 text-4xl font-bold tracking-tight'>T3 Stack Starter</h1>\n        <p className='mt-4 text-slate-600'>Next.js App Router, tRPC, Auth.js, Prisma, TailwindCSS, and TanStack Query are wired together.</p>\n      </section>\n      <HealthCheck />\n    </main>\n  );\n}\n",
+      "_components": {
+        "health-check.tsx": "'use client';\n\nimport { api } from '~/trpc/react';\n\nexport function HealthCheck() {\n  const health = api.health.useQuery();\n\n  return (\n    <div className='rounded-lg border border-slate-200 bg-white p-4 shadow-sm'>\n      <p className='text-sm text-slate-500'>tRPC health check</p>\n      <p className='mt-1 text-lg font-semibold'>{health.data ?? 'Loading...'}</p>\n    </div>\n  );\n}\n"
+      },
+      "api": {
+        "auth": {
+          "[...nextauth]": {
+            "route.ts": "import NextAuth from 'next-auth';\n\nimport { authConfig } from '~/server/auth/config';\n\nconst handler = NextAuth(authConfig);\n\nexport { handler as GET, handler as POST };\n"
+          }
+        },
+        "trpc": {
+          "[trpc]": {
+            "route.ts": "import { fetchRequestHandler } from '@trpc/server/adapters/fetch';\n\nimport { appRouter } from '~/server/api/root';\nimport { createTRPCContext } from '~/server/api/trpc';\n\nconst handler = (request: Request) =>\n  fetchRequestHandler({\n    endpoint: '/api/trpc',\n    req: request,\n    router: appRouter,\n    createContext: () => createTRPCContext({ request }),\n  });\n\nexport { handler as GET, handler as POST };\n"
+          }
+        }
+      }
     },
     "server": {
       "api": {
-        "root.ts": "export const api = {\n  health() {\n    return 'API ready';\n  },\n};\n"
+        "root.ts": "import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';\n\nexport const appRouter = createTRPCRouter({\n  health: publicProcedure.query(() => 'API ready'),\n});\n\nexport type AppRouter = typeof appRouter;\n",
+        "trpc.ts": "import { initTRPC } from '@trpc/server';\nimport superjson from 'superjson';\n\nexport async function createTRPCContext(opts: { request: Request }) {\n  return { headers: opts.request.headers };\n}\n\ntype TRPCContext = Awaited<ReturnType<typeof createTRPCContext>>;\n\nconst t = initTRPC.context<TRPCContext>().create({\n  transformer: superjson,\n});\n\nexport const createTRPCRouter = t.router;\nexport const publicProcedure = t.procedure;\n"
+      },
+      "auth": {
+        "config.ts": "import type { NextAuthOptions } from 'next-auth';\nimport GitHubProvider from 'next-auth/providers/github';\n\nexport const authConfig: NextAuthOptions = {\n  providers: [\n    GitHubProvider({\n      clientId: process.env.GITHUB_CLIENT_ID ?? '',\n      clientSecret: process.env.GITHUB_CLIENT_SECRET ?? '',\n    }),\n  ],\n  session: { strategy: 'jwt' },\n};\n",
+        "index.ts": "import { getServerSession } from 'next-auth';\n\nimport { authConfig } from '~/server/auth/config';\n\nexport const getServerAuthSession = () => getServerSession(authConfig);\n"
       },
       "db.ts": "import { PrismaClient } from '@prisma/client';\n\nconst globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };\n\nexport const db = globalForPrisma.prisma ?? new PrismaClient();\n\nif (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db;\n"
+    },
+    "trpc": {
+      "react.tsx": "'use client';\n\nimport { QueryClient, QueryClientProvider } from '@tanstack/react-query';\nimport { httpBatchLink } from '@trpc/client';\nimport { createTRPCReact } from '@trpc/react-query';\nimport { useState } from 'react';\nimport superjson from 'superjson';\n\nimport type { AppRouter } from '~/server/api/root';\n\nexport const api = createTRPCReact<AppRouter>();\n\nfunction getBaseUrl() {\n  if (typeof window !== 'undefined') return '';\n  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;\n  return 'http://localhost:3000';\n}\n\nexport function TRPCReactProvider({ children }: { children: React.ReactNode }) {\n  const [queryClient] = useState(() => new QueryClient());\n  const [trpcClient] = useState(() =>\n    api.createClient({\n      links: [\n        httpBatchLink({\n          transformer: superjson,\n          url: `${getBaseUrl()}/api/trpc`,\n        }),\n      ],\n    }),\n  );\n\n  return (\n    <api.Provider client={trpcClient} queryClient={queryClient}>\n      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>\n    </api.Provider>\n  );\n}\n"
     },
     "components": {
       ".gitkeep": ""
@@ -17,7 +40,7 @@
       ".gitkeep": ""
     },
     "styles": {
-      "globals.css": ":root {\n  color-scheme: light;\n  font-family: system-ui, sans-serif;\n}\n\nbody {\n  margin: 0;\n}\n\nmain {\n  padding: 2rem;\n}\n"
+      "globals.css": "@tailwind base;\n@tailwind components;\n@tailwind utilities;\n\n:root {\n  color-scheme: light;\n  font-family: system-ui, sans-serif;\n}\n\nbody {\n  margin: 0;\n  background: #f8fafc;\n  color: #0f172a;\n}\n"
     }
   },
   "prisma": {
@@ -26,9 +49,12 @@
   "public": {
     ".gitkeep": ""
   },
-  ".env.example": "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/t3_starter\nNEXTAUTH_SECRET=\nNEXTAUTH_URL=http://localhost:3000\n",
+  ".env.example": "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/t3_starter\nNEXTAUTH_SECRET=\nNEXTAUTH_URL=http://localhost:3000\nGITHUB_CLIENT_ID=\nGITHUB_CLIENT_SECRET=\n",
   ".gitignore": "node_modules\n.next\n.env\n.env.local\ncoverage\n",
-  "README.md": "# T3 Stack Starter\n\nGenerated with [Scaffinity](https://github.com/devi5040/scaffinity).\n\n## Getting Started\n\n```bash\nnpm install\nnpm run dev\n```\n\nThis blueprint includes a minimal Next.js App Router surface, server API root, Prisma schema, and global styles.\n",
-  "package.json": "{\n  \"name\": \"t3-stack-starter\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"dev\": \"next dev\",\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"db:push\": \"prisma db push\",\n    \"db:studio\": \"prisma studio\"\n  },\n  \"dependencies\": {\n    \"@prisma/client\": \"latest\",\n    \"next\": \"latest\",\n    \"next-auth\": \"latest\",\n    \"react\": \"latest\",\n    \"react-dom\": \"latest\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"latest\",\n    \"@types/react\": \"latest\",\n    \"@types/react-dom\": \"latest\",\n    \"prisma\": \"latest\",\n    \"typescript\": \"latest\"\n  }\n}\n",
+  "next.config.mjs": "const nextConfig = {};\n\nexport default nextConfig;\n",
+  "postcss.config.mjs": "const config = {\n  plugins: {\n    tailwindcss: {},\n    autoprefixer: {},\n  },\n};\n\nexport default config;\n",
+  "tailwind.config.ts": "import type { Config } from 'tailwindcss';\n\nconst config: Config = {\n  content: ['./src/**/*.{ts,tsx}'],\n  theme: {\n    extend: {},\n  },\n  plugins: [],\n};\n\nexport default config;\n",
+  "README.md": "# T3 Stack Starter\n\nGenerated with [Scaffinity](https://github.com/devi5040/scaffinity).\n\n## Getting Started\n\n```bash\nnpm install\nnpm run dev\n```\n\nThis blueprint includes a minimal Next.js App Router surface wired to tRPC, Auth.js/NextAuth route handlers, Prisma, TailwindCSS, and TanStack Query.\n\n## Included Stack Files\n\n- `src/server/api/trpc.ts` and `src/server/api/root.ts` define the tRPC context, router, and procedures.\n- `src/app/api/trpc/[trpc]/route.ts` exposes the App Router tRPC endpoint.\n- `src/server/auth/config.ts`, `src/server/auth/index.ts`, and `src/app/api/auth/[...nextauth]/route.ts` wire Auth.js/NextAuth.\n- `src/trpc/react.tsx` provides the React tRPC and TanStack Query client provider.\n- `tailwind.config.ts`, `postcss.config.mjs`, and `src/styles/globals.css` set up TailwindCSS.\n",
+  "package.json": "{\n  \"name\": \"t3-stack-starter\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"dev\": \"next dev\",\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"lint\": \"next lint\",\n    \"typecheck\": \"tsc --noEmit\",\n    \"db:push\": \"prisma db push\",\n    \"db:studio\": \"prisma studio\"\n  },\n  \"dependencies\": {\n    \"@prisma/client\": \"latest\",\n    \"@tanstack/react-query\": \"latest\",\n    \"@trpc/client\": \"latest\",\n    \"@trpc/react-query\": \"latest\",\n    \"@trpc/server\": \"latest\",\n    \"next\": \"latest\",\n    \"next-auth\": \"latest\",\n    \"react\": \"latest\",\n    \"react-dom\": \"latest\",\n    \"superjson\": \"latest\",\n    \"zod\": \"latest\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"latest\",\n    \"@types/react\": \"latest\",\n    \"@types/react-dom\": \"latest\",\n    \"autoprefixer\": \"latest\",\n    \"postcss\": \"latest\",\n    \"prisma\": \"latest\",\n    \"tailwindcss\": \"latest\",\n    \"typescript\": \"latest\"\n  }\n}\n",
   "tsconfig.json": "{\n  \"compilerOptions\": {\n    \"target\": \"es2020\",\n    \"lib\": [\"dom\", \"dom.iterable\", \"esnext\"],\n    \"allowJs\": true,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"preserve\",\n    \"incremental\": true,\n    \"baseUrl\": \".\",\n    \"paths\": {\n      \"~/*\": [\"./src/*\"]\n    }\n  },\n  \"include\": [\"next-env.d.ts\", \"**/*.ts\", \"**/*.tsx\", \".next/types/**/*.ts\"],\n  \"exclude\": [\"node_modules\"]\n}\n"
 }
