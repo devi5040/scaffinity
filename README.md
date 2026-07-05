@@ -149,6 +149,13 @@ Ready-made blueprints in the [`/examples`](./examples) folder:
 | [`nextjs-app-router.json`](./examples/nextjs-app-router.json) | Next.js App Router `src/app` project |
 | [`nest-api.json`](./examples/nest-api.json)             | NestJS REST API starter       |
 | [`nextjs-app.json`](./examples/nextjs-app.json)         | Next.js App Router project    |
+| [`react-native.json`](./examples/react-native.json)     | React Native mobile starter   |
+
+Generate the React Native starter:
+
+```bash
+scaffinity generate examples/react-native.json -o mobile-app
+```
 
 **Have a blueprint to share?** Open a PR and add it to `/examples`.
 
