@@ -1,0 +1,34 @@
+{
+  "src": {
+    "app": {
+      "layout.tsx": "import '~/styles/globals.css';\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body>{children}</body>\n    </html>\n  );\n}\n",
+      "page.tsx": "import { api } from '~/server/api/root';\n\nexport default function HomePage() {\n  return (\n    <main>\n      <h1>T3 Stack Starter</h1>\n      <p>{api.health()}</p>\n    </main>\n  );\n}\n"
+    },
+    "server": {
+      "api": {
+        "root.ts": "export const api = {\n  health() {\n    return 'API ready';\n  },\n};\n"
+      },
+      "db.ts": "import { PrismaClient } from '@prisma/client';\n\nconst globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };\n\nexport const db = globalForPrisma.prisma ?? new PrismaClient();\n\nif (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db;\n"
+    },
+    "components": {
+      ".gitkeep": ""
+    },
+    "hooks": {
+      ".gitkeep": ""
+    },
+    "styles": {
+      "globals.css": ":root {\n  color-scheme: light;\n  font-family: system-ui, sans-serif;\n}\n\nbody {\n  margin: 0;\n}\n\nmain {\n  padding: 2rem;\n}\n"
+    }
+  },
+  "prisma": {
+    "schema.prisma": "generator client {\n  provider = \"prisma-client-js\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id        String   @id @default(cuid())\n  email     String   @unique\n  createdAt DateTime @default(now())\n}\n"
+  },
+  "public": {
+    ".gitkeep": ""
+  },
+  ".env.example": "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/t3_starter\nNEXTAUTH_SECRET=\nNEXTAUTH_URL=http://localhost:3000\n",
+  ".gitignore": "node_modules\n.next\n.env\n.env.local\ncoverage\n",
+  "README.md": "# T3 Stack Starter\n\nGenerated with [Scaffinity](https://github.com/devi5040/scaffinity).\n\n## Getting Started\n\n```bash\nnpm install\nnpm run dev\n```\n\nThis blueprint includes a minimal Next.js App Router surface, server API root, Prisma schema, and global styles.\n",
+  "package.json": "{\n  \"name\": \"t3-stack-starter\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"dev\": \"next dev\",\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"db:push\": \"prisma db push\",\n    \"db:studio\": \"prisma studio\"\n  },\n  \"dependencies\": {\n    \"@prisma/client\": \"latest\",\n    \"next\": \"latest\",\n    \"next-auth\": \"latest\",\n    \"react\": \"latest\",\n    \"react-dom\": \"latest\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"latest\",\n    \"@types/react\": \"latest\",\n    \"@types/react-dom\": \"latest\",\n    \"prisma\": \"latest\",\n    \"typescript\": \"latest\"\n  }\n}\n",
+  "tsconfig.json": "{\n  \"compilerOptions\": {\n    \"target\": \"es2020\",\n    \"lib\": [\"dom\", \"dom.iterable\", \"esnext\"],\n    \"allowJs\": true,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"preserve\",\n    \"incremental\": true,\n    \"baseUrl\": \".\",\n    \"paths\": {\n      \"~/*\": [\"./src/*\"]\n    }\n  },\n  \"include\": [\"next-env.d.ts\", \"**/*.ts\", \"**/*.tsx\", \".next/types/**/*.ts\"],\n  \"exclude\": [\"node_modules\"]\n}\n"
+}

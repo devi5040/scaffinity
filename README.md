@@ -146,6 +146,7 @@ Ready-made blueprints in the [`/examples`](./examples) folder:
 | ------------------------------------------------------- | ----------------------------- |
 | [`express-ts-api.json`](./examples/express-ts-api.json) | Express + TypeScript REST API |
 | [`nextjs-app.json`](./examples/nextjs-app.json)         | Next.js App Router project    |
+| [`t3-stack.json`](./examples/t3-stack.json)             | T3 Stack starter              |
 
 **Have a blueprint to share?** Open a PR and add it to `/examples`.
 
