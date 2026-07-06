@@ -148,7 +148,7 @@ Ready-made blueprints in the [`/examples`](./examples) folder:
 | [`nextjs-app.json`](./examples/nextjs-app.json)         | Next.js app with route groups |
 | [`nextjs-app-router.json`](./examples/nextjs-app-router.json) | Next.js App Router `src/app` project |
 | [`nest-api.json`](./examples/nest-api.json)             | NestJS REST API starter       |
-| [`nextjs-app.json`](./examples/nextjs-app.json)         | Next.js App Router project    |
+| [`t3-stack.json`](./examples/t3-stack.json)             | T3 Stack starter              |
 | [`react-native.json`](./examples/react-native.json)     | React Native mobile starter   |
 
 Generate the React Native starter:
