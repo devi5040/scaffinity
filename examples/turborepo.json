@@ -1,0 +1,55 @@
+{
+  "apps": {
+    "web": {
+      "src": {
+        "app": {
+          "layout.tsx": "import type { Metadata } from 'next';\nimport './globals.css';\n\nexport const metadata: Metadata = {\n  title: 'TurboRepo Web App',\n  description: 'Generated with Scaffinity',\n};\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body>{children}</body>\n    </html>\n  );\n}\n",
+          "page.tsx": "export default function HomePage() {\n  return (\n    <main>\n      <p>Scaffinity blueprint</p>\n      <h1>TurboRepo Web App</h1>\n      <p>Share UI, lint, and TypeScript config packages across workspace apps.</p>\n    </main>\n  );\n}\n",
+          "globals.css": ":root {\n  color-scheme: light;\n  font-family: system-ui, sans-serif;\n}\n\nbody {\n  margin: 0;\n}\n\nmain {\n  padding: 2rem;\n}\n"
+        }
+      },
+      "README.md": "# Web App\n\nMain application workspace for the generated TurboRepo monorepo.\n",
+      "package.json": "{\n  \"name\": \"web\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"dev\": \"next dev\",\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"lint\": \"next lint\"\n  },\n  \"dependencies\": {\n    \"next\": \"latest\",\n    \"react\": \"latest\",\n    \"react-dom\": \"latest\",\n    \"@repo/ui\": \"workspace:*\"\n  },\n  \"devDependencies\": {\n    \"@repo/eslint-config\": \"workspace:*\",\n    \"@repo/typescript-config\": \"workspace:*\",\n    \"@types/node\": \"latest\",\n    \"@types/react\": \"latest\",\n    \"@types/react-dom\": \"latest\",\n    \"typescript\": \"latest\"\n  }\n}\n",
+      "next.config.js": "/** @type {import('next').NextConfig} */\nconst nextConfig = {};\n\nmodule.exports = nextConfig;\n",
+      "tsconfig.json": "{\n  \"extends\": \"@repo/typescript-config/nextjs.json\",\n  \"compilerOptions\": {\n    \"plugins\": [{ \"name\": \"next\" }]\n  },\n  \"include\": [\"next-env.d.ts\", \"**/*.ts\", \"**/*.tsx\", \".next/types/**/*.ts\"],\n  \"exclude\": [\"node_modules\"]\n}\n"
+    },
+    "docs": {
+      "src": {
+        "app": {
+          "layout.tsx": "export default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body>{children}</body>\n    </html>\n  );\n}\n",
+          "page.tsx": "export default function DocsPage() {\n  return (\n    <main>\n      <h1>Project Documentation</h1>\n      <p>Use this workspace for guides, API notes, and team onboarding.</p>\n    </main>\n  );\n}\n"
+        }
+      },
+      "README.md": "# Documentation App\n\nDocumentation workspace for guides and references.\n",
+      "package.json": "{\n  \"name\": \"docs\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"dev\": \"next dev --port 3001\",\n    \"build\": \"next build\",\n    \"start\": \"next start --port 3001\",\n    \"lint\": \"next lint\"\n  },\n  \"dependencies\": {\n    \"next\": \"latest\",\n    \"react\": \"latest\",\n    \"react-dom\": \"latest\"\n  },\n  \"devDependencies\": {\n    \"@repo/eslint-config\": \"workspace:*\",\n    \"@repo/typescript-config\": \"workspace:*\",\n    \"@types/node\": \"latest\",\n    \"@types/react\": \"latest\",\n    \"@types/react-dom\": \"latest\",\n    \"typescript\": \"latest\"\n  }\n}\n",
+      "next.config.js": "/** @type {import('next').NextConfig} */\nconst nextConfig = {};\n\nmodule.exports = nextConfig;\n",
+      "tsconfig.json": "{\n  \"extends\": \"@repo/typescript-config/nextjs.json\",\n  \"compilerOptions\": {\n    \"plugins\": [{ \"name\": \"next\" }]\n  },\n  \"include\": [\"next-env.d.ts\", \"**/*.ts\", \"**/*.tsx\", \".next/types/**/*.ts\"],\n  \"exclude\": [\"node_modules\"]\n}\n"
+    }
+  },
+  "packages": {
+    "ui": {
+      "src": {
+        "button.tsx": "export function Button({ children }: { children: React.ReactNode }) {\n  return <button type=\"button\">{children}</button>;\n}\n",
+        "index.ts": "export { Button } from './button';\n"
+      },
+      "README.md": "# UI Package\n\nShared React components for apps in this monorepo.\n",
+      "package.json": "{\n  \"name\": \"@repo/ui\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"main\": \"src/index.ts\",\n  \"types\": \"src/index.ts\",\n  \"dependencies\": {\n    \"react\": \"latest\"\n  },\n  \"devDependencies\": {\n    \"@repo/typescript-config\": \"workspace:*\",\n    \"@types/react\": \"latest\",\n    \"typescript\": \"latest\"\n  }\n}\n"
+    },
+    "eslint-config": {
+      "README.md": "# ESLint Config\n\nShared lint configuration for workspace packages.\n",
+      "index.js": "module.exports = {\n  extends: ['eslint:recommended'],\n};\n",
+      "package.json": "{\n  \"name\": \"@repo/eslint-config\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"devDependencies\": {\n    \"eslint\": \"latest\"\n  }\n}\n"
+    },
+    "typescript-config": {
+      "README.md": "# TypeScript Config\n\nShared TypeScript configuration presets.\n",
+      "base.json": "{\n  \"compilerOptions\": {\n    \"strict\": true,\n    \"skipLibCheck\": true,\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"noEmit\": true\n  }\n}\n",
+      "nextjs.json": "{\n  \"extends\": \"./base.json\",\n  \"compilerOptions\": {\n    \"jsx\": \"preserve\",\n    \"lib\": [\"dom\", \"dom.iterable\", \"esnext\"],\n    \"module\": \"esnext\",\n    \"target\": \"es5\"\n  }\n}\n",
+      "package.json": "{\n  \"name\": \"@repo/typescript-config\",\n  \"version\": \"0.1.0\",\n  \"private\": true\n}\n"
+    }
+  },
+  ".env.example": "NODE_ENV=development\n",
+  ".gitignore": "node_modules\n.next\ndist\n.env\n.env.local\n.turbo\n",
+  "README.md": "# TurboRepo Monorepo\n\nGenerated with [Scaffinity](https://github.com/devi5040/scaffinity).\n\n## Getting Started\n\n```bash\nnpm install\nnpm run dev\n```\n\n## Workspaces\n\n- `apps/web` - main Next.js application\n- `apps/docs` - documentation application\n- `packages/ui` - shared React component package\n- `packages/eslint-config` - shared ESLint configuration\n- `packages/typescript-config` - shared TypeScript presets\n",
+  "package.json": "{\n  \"name\": \"turborepo-monorepo-starter\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"dev\": \"turbo dev\",\n    \"build\": \"turbo build\",\n    \"lint\": \"turbo lint\"\n  },\n  \"devDependencies\": {\n    \"turbo\": \"latest\"\n  },\n  \"workspaces\": [\n    \"apps/*\",\n    \"packages/*\"\n  ]\n}\n",
+  "turbo.json": "{\n  \"$schema\": \"https://turbo.build/schema.json\",\n  \"tasks\": {\n    \"build\": {\n      \"dependsOn\": [\"^build\"],\n      \"outputs\": [\".next/**\", \"dist/**\"]\n    },\n    \"dev\": {\n      \"cache\": false,\n      \"persistent\": true\n    },\n    \"lint\": {}\n  }\n}\n"
+}

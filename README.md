@@ -150,11 +150,18 @@ Ready-made blueprints in the [`/examples`](./examples) folder:
 | [`nest-api.json`](./examples/nest-api.json)             | NestJS REST API starter       |
 | [`t3-stack.json`](./examples/t3-stack.json)             | T3 Stack starter              |
 | [`react-native.json`](./examples/react-native.json)     | React Native mobile starter   |
+| [`turborepo.json`](./examples/turborepo.json)           | TurboRepo monorepo starter    |
 
 Generate the React Native starter:
 
 ```bash
 scaffinity generate examples/react-native.json -o mobile-app
+```
+
+Generate the TurboRepo monorepo starter:
+
+```bash
+scaffinity generate examples/turborepo.json -o my-monorepo
 ```
 
 **Have a blueprint to share?** Open a PR and add it to `/examples`.
