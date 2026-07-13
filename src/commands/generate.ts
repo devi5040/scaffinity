@@ -57,7 +57,7 @@ async function processNode(
             if (options.verbose)
               console.log(chalk.green("  create:"), chalk.white(fullPath));
           }
-        } catch (error) {
+        } catch {
           result.errors.push(fullPath);
           console.log(chalk.red(" error:"), chalk.white(fullPath));
         }
