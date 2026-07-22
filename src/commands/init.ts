@@ -29,9 +29,7 @@ async function buildInteractive(): Promise<StructureNode> {
 
     console.log(chalk.blue(`\n ${current?.label} (${current?.currentPath})`));
 
-    const continueAdding = true;
-
-    while (continueAdding) {
+    while (true) {
       const { action } = await prompts({
         type: "select",
         name: "action",
