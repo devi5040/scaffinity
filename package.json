@@ -10,7 +10,9 @@
   "scripts": {
     "build": "tsup src/cli.ts src/index.ts --format cjs --dts",
     "dev": "ts-node src/cli.ts",
-    "start": "node dist/cli.js"
+    "start": "node dist/cli.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "keywords": [
     "scaffinity",
@@ -31,12 +33,19 @@
     "prompts": "^2.4.2"
   },
   "devDependencies": {
-    "@types/node": "^26.0.1",
+    "@eslint/js": "^10.0.1",
+    "@eslint/json": "^2.0.1",
+    "@eslint/markdown": "^8.0.3",
     "@types/fs-extra": "^11.0.4",
+    "@types/node": "^26.0.1",
     "@types/prompts": "^2.4.9",
+    "eslint": "^10.7.0",
+    "globals": "^17.7.0",
+    "jiti": "^2.7.0",
     "ts-node": "^10.9.2",
     "tsup": "^8.5.1",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.65.0"
   },
   "engines": {
     "node": ">=18"

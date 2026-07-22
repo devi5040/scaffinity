@@ -91,7 +91,7 @@ scaffinity generate express-ts-api.json -o ./my-api
 
 Output:
 
-```
+```sh
 ✅ Blueprint loaded
 
   mkdir: my-api/src
@@ -142,14 +142,14 @@ scaffinity export ./my-project -o team-blueprint.json
 
 Ready-made blueprints in the [`/examples`](./examples) folder:
 
-| Blueprint                                               | Description                   |
-| ------------------------------------------------------- | ----------------------------- |
-| [`express-ts-api.json`](./examples/express-ts-api.json) | Express + TypeScript REST API |
-| [`nextjs-app.json`](./examples/nextjs-app.json)         | Next.js app with route groups |
+| Blueprint                                                     | Description                          |
+| ------------------------------------------------------------- | ------------------------------------ |
+| [`express-ts-api.json`](./examples/express-ts-api.json)       | Express + TypeScript REST API        |
+| [`nextjs-app.json`](./examples/nextjs-app.json)               | Next.js app with route groups        |
 | [`nextjs-app-router.json`](./examples/nextjs-app-router.json) | Next.js App Router `src/app` project |
-| [`nest-api.json`](./examples/nest-api.json)             | NestJS REST API starter       |
-| [`nextjs-app.json`](./examples/nextjs-app.json)         | Next.js App Router project    |
-| [`react-native.json`](./examples/react-native.json)     | React Native mobile starter   |
+| [`nest-api.json`](./examples/nest-api.json)                   | NestJS REST API starter              |
+| [`nextjs-app.json`](./examples/nextjs-app.json)               | Next.js App Router project           |
+| [`react-native.json`](./examples/react-native.json)           | React Native mobile starter          |
 
 Generate the React Native starter:
 

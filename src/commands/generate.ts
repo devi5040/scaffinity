@@ -59,7 +59,10 @@ async function processNode(
           }
         } catch (error) {
           result.errors.push(fullPath);
-          console.log(chalk.red(" error:"), chalk.white(fullPath));
+          console.log(
+            chalk.red(" error:", (error as Error).message),
+            chalk.white(fullPath),
+          );
         }
       }
     } else if (typeof value === "object" && value !== null) {
